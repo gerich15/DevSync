@@ -4,6 +4,12 @@
 
 ---
 
+<img width="1913" height="966" alt="Снимок экрана от 2026-01-30 00-14-42" src="https://github.com/user-attachments/assets/dc6d4f0f-aabc-4e69-a38c-1a80a31af4ab" />
+
+<img width="1913" height="966" alt="Снимок экрана от 2026-01-30 00-13-48" src="https://github.com/user-attachments/assets/6beca0d8-fe63-471a-8f9d-4f2fd79d72c7" />
+
+---
+
 ## Возможности
 
 - **GitHub OAuth** — вход через GitHub
@@ -42,7 +48,7 @@
 ### 1. Клонирование и конфиг
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/DevSync.git
+git clone https://github.com/gerich15/DevSync.git
 cd DevSync
 cp .env.example .env
 ```
@@ -99,6 +105,10 @@ npm run dev
 Откройте http://localhost:3100 — Vite проксирует `/api` и `/ws` на backend (порт 8181).
 
 Миграции применяются автоматически при первом запуске Postgres (volume `./server/migrations`).
+
+
+<img width="1913" height="966" alt="Снимок экрана от 2026-01-30 00-14-08" src="https://github.com/user-attachments/assets/fac582b9-3c3a-4f5c-9abd-81ff7e633694" />
+
 
 ---
 
