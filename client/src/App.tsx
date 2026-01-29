@@ -6,6 +6,7 @@ import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Reports from './pages/Reports'
 import Settings from './pages/Settings'
+import Templates from './pages/Templates'
 import AuthCallback from './pages/AuthCallback'
 
 class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
@@ -56,6 +57,7 @@ export default function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
+          <Route path="templates" element={<ProtectedRoute><Templates /></ProtectedRoute>} />
           <Route path="settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />

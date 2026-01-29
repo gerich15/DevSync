@@ -1,13 +1,20 @@
 import { useMemo, useRef, useEffect } from 'react'
 import * as d3 from 'd3'
 import type { ContributionDay } from '../../types/github'
+import type { TemplateConfig } from '../../types/template'
 
 const CELL = 12
 const GAP = 3
 const COLS = 53
-const colors = ['#0F172A', '#164B35', '#0F7139', '#26A641', '#39D353']
+const DEFAULT_COLORS = ['#0F172A', '#164B35', '#0F7139', '#26A641', '#39D353']
 
-export default function HeatmapChart({ data = [] }: { data?: ContributionDay[] }) {
+interface HeatmapChartProps {
+  data?: ContributionDay[]
+  /** Конфиг из шаблона (Templates → heatmap-default). Если передан — цвета берутся из него. */
+  templateConfig?: TemplateConfig | null
+}
+
+export default function HeatmapChart({ data = [], templateConfig }: HeatmapChartProps) {
   const svgRef = useRef<SVGSVGElement>(null)
   const safeData = Array.isArray(data) ? data : []
   const byDate = useMemo(() => {
@@ -16,10 +23,25 @@ export default function HeatmapChart({ data = [] }: { data?: ContributionDay[] }
     return m
   }, [safeData])
 
+  const colors = useMemo(() => {
+    const c = templateConfig?.colors as Record<string, string> | undefined
+    if (c?.empty != null && c?.active != null) {
+      const empty = c.empty
+      const active = c.active
+      const max = d3.max(safeData.map((d) => d.count)) ?? 1
+      return (count: number) =>
+        count === 0 ? empty : d3.interpolate(empty, active)(Math.min(1, count / max))
+    }
+    return (count: number) => {
+      const max = d3.max(safeData.map((d) => d.count)) ?? 1
+      const scale = d3.scaleQuantile<string>().domain([0, max]).range(DEFAULT_COLORS)
+      return scale(count)
+    }
+  }, [templateConfig?.colors, safeData])
+
   useEffect(() => {
     if (!svgRef.current || !safeData.length) return
     const max = d3.max(safeData.map((d) => d.count)) ?? 1
-    const scale = d3.scaleQuantile<string>().domain([0, max]).range(colors)
     const svg = d3.select(svgRef.current)
     svg.selectAll('*').remove()
     const start = new Date()
@@ -33,9 +55,10 @@ export default function HeatmapChart({ data = [] }: { data?: ContributionDay[] }
       const row = Math.floor(i / COLS)
       const x = col * (CELL + GAP)
       const y = row * (CELL + GAP)
-      svg.append('rect').attr('x', x).attr('y', y).attr('width', CELL).attr('height', CELL).attr('rx', 2).attr('fill', scale(count))
+      const fill = colors(count)
+      svg.append('rect').attr('x', x).attr('y', y).attr('width', CELL).attr('height', CELL).attr('rx', 2).attr('fill', fill)
     }
-  }, [safeData, byDate])
+  }, [safeData, byDate, colors])
 
   const w = COLS * (CELL + GAP)
   const h = Math.ceil(365 / COLS) * (CELL + GAP)

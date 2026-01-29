@@ -10,6 +10,7 @@ import RepoList from '../components/dashboard/RepoList'
 import CommitsTimeline from '../components/dashboard/CommitsTimeline'
 import AnimatedCard from '../components/ui/AnimatedCard'
 import BeamsBackground from '../components/ui/BeamsBackground'
+import { templateRenderer } from '../core/templateInstance'
 
 const PERIOD_LABELS: Record<StatsPeriod, string> = {
   week: 'Неделя',
@@ -139,7 +140,10 @@ export default function Dashboard() {
       </div>
       <AnimatedCard>
         <h3 className="mb-4 text-lg font-semibold text-white">График контрибуций</h3>
-        <HeatmapChart data={contributions} />
+        <HeatmapChart
+          data={contributions}
+          templateConfig={templateRenderer.getTemplate('heatmap-default') ? templateRenderer.applyTemplate('heatmap-default') : undefined}
+        />
       </AnimatedCard>
       <div className="grid gap-6 lg:grid-cols-2">
         <AnimatedCard>
