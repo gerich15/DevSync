@@ -1,0 +1,38 @@
+# Env
+.env
+.env.local
+.env.*.local
+
+# Dependencies
+node_modules/
+
+# Build
+client/dist/
+server/bin/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Go
+*.exe
+*.test
+*.out
+vendor/
+
+# Vite
+*.local
+
+# Misc
+*.bak
+.cache/
